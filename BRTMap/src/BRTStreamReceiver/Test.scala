@@ -1,4 +1,4 @@
-package main.scala
+package BRTStreamReceiver
 
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions._
@@ -13,7 +13,8 @@ object Test {
   // http://webapibrt.rio.rj.gov.br/api/v1/brt
 
   val spark = SparkSession.builder().appName("Teste")//.config("spark.master", "local[*]")
-      .master("spark://127.0.0.1:7077").getOrCreate()
+      .master("spark://192.168.21.2:7077")
+      .getOrCreate()
   
   Logger.getLogger("org").setLevel(Level.ERROR)
   Logger.getLogger("akka").setLevel(Level.ERROR)
@@ -41,7 +42,7 @@ object Test {
       Array(StructField("veiculos", ArrayType(veiculoType))))
         
     
-  val veiculos = spark.read.schema(veiculosType).json("hdfs://localhost:9000/user/jonny/data/brt_20170817192501.json")
+  val veiculos = spark.read.schema(veiculosType).json("hdfs://192.168.21.2:9000/user/ubuntu/data/brt_20170818132701.json")
   
 // veiculos.printSchema()
 //  root
@@ -56,30 +57,35 @@ object Test {
   
   val a = veiculos.select(explode($"veiculos").as("veiculo"))
   
-//  a.printSchema()
-//  root
-// |-- veiculo: struct (nullable = true)
-// |    |-- codigo: string (nullable = true)
-// |    |-- datahora: long (nullable = true)
-// |    |-- latitude: double (nullable = true)
-// |    |-- linha: string (nullable = true)
-// |    |-- longitude: double (nullable = true)
-// |    |-- velocidade: double (nullable = true)
-      
   val b = a
-  .withColumn("codigo", (a("veiculo.codigo")))
-  .withColumn("datahora", from_unixtime(a("veiculo.datahora")/1000L))
-  .withColumn("linha", (a("veiculo.linha")))
-  .withColumn("latitude", (a("veiculo.latitude")))
-  .withColumn("longitude", (a("veiculo.longitude")))
-  .withColumn("velocidade", (a("veiculo.velocidade")))
-  .withColumn("id_migracao", (a("veiculo.id_migracao")))
-  .withColumn("sentido", (a("veiculo.sentido")))
-  .withColumn("trajeto", (a("veiculo.trajeto")))
-  .drop(a("veiculo"))
-//  
-  b.printSchema()
-//  b.show(10)
+  .withColumn("codigo", ($"veiculo.codigo"))
+  .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora"/1000L)))
+  .withColumn("codlinha", ($"veiculo.linha"))
+  .withColumn("latitude", ($"veiculo.latitude"))
+  .withColumn("longitude", ($"veiculo.longitude"))
+  .withColumn("velocidade", ($"veiculo.velocidade"))
+  .withColumn("sentido", ($"veiculo.sentido"))
+  .withColumn("nome", ($"veiculo.trajeto"))
+  .drop($"veiculo")
+        
+  val c = b
+  .filter(!($"nome".isNull) && !($"codlinha".isNull))
+  
+  val d = c
+  .filter(($"codlinha".like("5_____") || $"codlinha".like("__A") || $"codlinha".like("__")))
+      
+  val e = d
+  .withColumn("linha", trim(split($"nome","-")(0)))
+  .withColumn("trajeto", trim(split($"nome","-")(1)))
+  .drop($"codlinha")
+  .drop($"nome")
+  
+  val f = e
+  .filter($"linha".like("___") || $"linha".like("__"))
+  
+  println(f.count() + " carros")
+  f.printSchema()
+  f.show(100)
   
   }
   

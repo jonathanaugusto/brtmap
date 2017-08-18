@@ -1,4 +1,4 @@
-package main.scala
+package BRTStreamReceiver
 
 import com.mysql.jdbc.Driver
 import org.apache.spark.sql._
@@ -17,7 +17,7 @@ import org.apache.spark.sql.streaming.ProcessingTime
 // Pra rodar no spark-submit:
 // bin/spark-submit --deploy-mode cluster --master spark://localhost:7077 --jars ../BRTStreamReceiver/mysql-connector-java-5.1.43-bin.jar --class main.scala.BRTStreamReceiver ../BRTStreamReceiver/BRTStreamReceiver.jar <args>
 
-object BRTStreamReceiver {
+object Main {
 
   val veiculoType = StructType(
     Array(
@@ -36,16 +36,14 @@ object BRTStreamReceiver {
 
   def main(args: Array[String]) {
     if (args.length < 2) {
-      System.err.println("Usage: BRTStreamReceiver <files_dir> <mysql_url> <mysql_user> <mysql_pwd> <mysql_schema> <mysql_table>")
+      System.err.println("Usage: BRTStreamReceiver <files_dir> <mysql_conn> <mysql_usr> <mysql_pwd>")
       System.exit(1)
     }
 
-    val directory = args(0)
-    val mysql_url = args(1)
+    val files_dir = args(0)
+    val mysql_con = args(1)
     val mysql_usr = args(2)
     val mysql_pwd = args(3)
-    val mysql_sch = args(4)
-    val mysql_tab = args(5)
 
     val writeToDB = new ForeachWriter[Row] {
       val driver = "com.mysql.jdbc.Driver"
@@ -55,7 +53,7 @@ object BRTStreamReceiver {
       def open(partitionId: Long, version: Long): Boolean = {
         // open connection
         Class.forName(driver)
-        connection = DriverManager.getConnection("jdbc:mysql://"+ mysql_url + "/" + mysql_sch, mysql_usr, mysql_pwd)
+        connection = DriverManager.getConnection(mysql_con, mysql_usr, mysql_pwd)
         statement = connection.createStatement
         true
       }
@@ -63,10 +61,10 @@ object BRTStreamReceiver {
       def process(record: Row) = {
         // write string to connection
         statement.executeUpdate("INSERT INTO " +
-          "gpsdata (codigo, linha, latitude, longitude, datahora, velocidade, id_migracao, sentido, trajeto) VALUES ('" +
+          "gpsdata (codigo, linha, latitude, longitude, datahora, velocidade, sentido, trajeto) VALUES ('" +
           record.getAs[String]("codigo") + "','" + record.getAs[String]("linha") + "'," + record.getAs[Double]("latitude") + "," +
           record.getAs[Double]("longitude") + ",'" + record.getAs[Timestamp]("datahora") + "'," + record.getAs[Double]("velocidade") + ",'" +
-          record.getAs[String]("id_migracao") + "','" + record.getAs[String]("sentido") + "',\"" + record.getAs[String]("trajeto") + "\")")
+          record.getAs[String]("sentido") + "',\"" + record.getAs[String]("trajeto") + "\")")
       }
 
       def close(errorOrNull: Throwable): Unit = {
@@ -88,37 +86,40 @@ object BRTStreamReceiver {
 
     val veiculos = spark.readStream
       .schema(veiculosType)
-      .json(directory)
+      .json(files_dir)
 
     val a = veiculos.select(explode($"veiculos").as("veiculo"))
-
+ 
     val b = a
-      .withColumn("codigo", (a("veiculo.codigo")))
-      .withColumn("linha", (a("veiculo.linha")))
-      .withColumn("latitude", (a("veiculo.latitude")))
-      .withColumn("longitude", (a("veiculo.longitude")))
-      .withColumn("datahora", to_timestamp(from_unixtime(a("veiculo.datahora") / 1000L)))
-      .withColumn("velocidade", (a("veiculo.velocidade")))
-      .withColumn("id_migracao", (a("veiculo.id_migracao")))
-      .withColumn("sentido", (a("veiculo.sentido")))
-      .withColumn("trajeto", (a("veiculo.trajeto")))
-      .drop(a("veiculo"))
+    .withColumn("codigo", ($"veiculo.codigo"))
+    .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora"/1000L)))
+    .withColumn("codlinha", ($"veiculo.linha"))
+    .withColumn("latitude", ($"veiculo.latitude"))
+    .withColumn("longitude", ($"veiculo.longitude"))
+    .withColumn("velocidade", ($"veiculo.velocidade"))
+    .withColumn("sentido", ($"veiculo.sentido"))
+    .withColumn("nome", ($"veiculo.trajeto"))
+    .drop($"veiculo")
+          
+    val c = b
+    .filter(!($"nome".isNull) && !($"codlinha".isNull))
+    
+    val d = c
+    .filter(($"codlinha".like("5_____") || $"codlinha".like("__A") || $"codlinha".like("__")))
+        
+    val e = d
+    .withColumn("linha", trim(split($"nome","-")(0)))
+    .withColumn("itinerario", trim(split($"nome","-")(1)))
+    .drop($"codlinha")
+    .drop($"nome")
+    
+    val f = e
+    .filter($"linha".like("___") || $"linha".like("__"))
 
-    //root
-    // |-- codigo: string (nullable = true)
-    // |-- linha: string (nullable = true)
-    // |-- latitude: double (nullable = true)
-    // |-- longitude: double (nullable = true)
-    // |-- datahora: timestamp (nullable = true)
-    // |-- velocidade: double (nullable = true)
-    // |-- id_migracao: double (nullable = true)
-    // |-- sentido: string (nullable = true)
-    // |-- trajeto: string (nullable = true)
-
-    val c = b.withWatermark("datahora", "10 minutes")
+    val g = f.withWatermark("datahora", "10 minutes")
       .dropDuplicates("codigo", "datahora")
 
-    val query = c.writeStream
+    val query = g.writeStream
       .outputMode("update")
       .foreach(writeToDB)
       //.format("console")
