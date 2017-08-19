@@ -15,7 +15,7 @@ import org.apache.spark.sql.streaming.ProcessingTime
 // * * * * *  curl -N http://webapibrt.rio.rj.gov.br/api/v1/brt | /usr/local/hadoop/bin/hdfs dfs -put - /user/ubuntu/data/brt_$(date +\%Y\%m\%d\%H\%M\%S).json
 
 // Pra rodar no spark-submit:
-// bin/spark-submit --deploy-mode cluster --master spark://localhost:7077 --jars ../BRTStreamReceiver/mysql-connector-java-5.1.43-bin.jar --class main.scala.BRTStreamReceiver ../BRTStreamReceiver/BRTStreamReceiver.jar <args>
+// bin/spark-submit --master spark://<host>:7077 --jars ../BRTStreamReceiver/mysql-connector-java-5.1.43-bin.jar --num-executors 3 --driver-memory 2g --executor-memory 1g --executor-cores 1 --class BRTStreamReceiver.Main main.scala.BRTStreamReceiver ../BRTStreamReceiver/BRTStreamReceiver.jar <args>
 
 object Main {
 
@@ -109,7 +109,7 @@ object Main {
         
     val e = d
     .withColumn("linha", trim(split($"nome","-")(0)))
-    .withColumn("itinerario", trim(split($"nome","-")(1)))
+    .withColumn("trajeto", trim(split($"nome","-")(1)))
     .drop($"codlinha")
     .drop($"nome")
     
