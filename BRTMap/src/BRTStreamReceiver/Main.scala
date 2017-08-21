@@ -115,11 +115,17 @@ object Main {
     
     val f = e
     .filter($"linha".like("___") || $"linha".like("__"))
-
-    val g = f.withWatermark("datahora", "10 minutes")
+    
+    val g = f
+    .withColumn("corredor",
+        when($"linha".like("1%") or $"linha".like("2%"),"TransOeste").otherwise(
+        when($"linha".like("3%") or $"linha".like("4%"),"TransCarioca").otherwise(
+        when($"linha".like("5%") ,"TransOlímpica").otherwise(""))))
+  
+    val h = g.withWatermark("datahora", "10 minutes")
       .dropDuplicates("codigo", "datahora")
 
-    val query = g.writeStream
+    val query = h.writeStream
       .outputMode("update")
       .foreach(writeToDB)
       //.format("console")

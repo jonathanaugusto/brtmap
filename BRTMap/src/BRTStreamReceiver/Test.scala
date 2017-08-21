@@ -1,6 +1,7 @@
 package BRTStreamReceiver
 
 import org.apache.spark.sql._
+import org.apache.spark.sql.functions.udf
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
@@ -13,7 +14,7 @@ object Test {
   // http://webapibrt.rio.rj.gov.br/api/v1/brt
 
   val spark = SparkSession.builder().appName("Teste")//.config("spark.master", "local[*]")
-      .master("spark://192.168.21.2:7077")
+      .master("local[1]")
       .getOrCreate()
   
   Logger.getLogger("org").setLevel(Level.ERROR)
@@ -40,7 +41,6 @@ object Test {
         
   val veiculosType = StructType(
       Array(StructField("veiculos", ArrayType(veiculoType))))
-        
     
   val veiculos = spark.read.schema(veiculosType).json("hdfs://192.168.21.2:9000/user/ubuntu/data/brt_20170818132701.json")
   
@@ -83,9 +83,16 @@ object Test {
   val f = e
   .filter($"linha".like("___") || $"linha".like("__"))
   
-  println(f.count() + " carros")
-  f.printSchema()
-  f.show(100)
+  val g = f
+  .withColumn("corredor",
+      when($"linha".like("1%") or $"linha".like("2%"),"TransOeste").otherwise(
+      when($"linha".like("3%") or $"linha".like("4%"),"TransCarioca").otherwise(
+      when($"linha".like("5%") ,"TransOlímpica").otherwise(""))))
+  
+  
+  println(g.count() + " carros")
+  g.printSchema()
+  g.show(20)
   
   }
   
