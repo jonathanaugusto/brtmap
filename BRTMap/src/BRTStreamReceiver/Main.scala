@@ -15,7 +15,7 @@ import org.apache.spark.sql.streaming.ProcessingTime
 // * * * * *  curl -N http://webapibrt.rio.rj.gov.br/api/v1/brt | /usr/local/hadoop/bin/hdfs dfs -put - /user/ubuntu/data/brt_$(date +\%Y\%m\%d\%H\%M\%S).json
 
 // Pra rodar no spark-submit:
-// bin/spark-submit --master spark://<host>:7077 --jars ../BRTStreamReceiver/mysql-connector-java-5.1.43-bin.jar --num-executors 3 --driver-memory 2g --executor-memory 1g --executor-cores 1 --class BRTStreamReceiver.Main main.scala.BRTStreamReceiver ../BRTStreamReceiver/BRTStreamReceiver.jar <args>
+// bin/spark-submit --master spark://<host>:7077 --jars ../BRTStreamReceiver/mysql-connector-java-5.1.43-bin.jar --num-executors 3 --driver-memory 2g --executor-memory 1g --executor-cores 1 --class BRTStreamReceiver.Main ../BRTStreamReceiver/BRTStreamReceiver.jar <args>
 
 object Main {
 
@@ -61,10 +61,10 @@ object Main {
       def process(record: Row) = {
         // write string to connection
         statement.executeUpdate("INSERT INTO " +
-          "gpsdata (codigo, linha, latitude, longitude, datahora, velocidade, sentido, trajeto) VALUES ('" +
+          "gpsdata (codigo, linha, latitude, longitude, datahora, velocidade, sentido, trajeto, corredor) VALUES ('" +
           record.getAs[String]("codigo") + "','" + record.getAs[String]("linha") + "'," + record.getAs[Double]("latitude") + "," +
           record.getAs[Double]("longitude") + ",'" + record.getAs[Timestamp]("datahora") + "'," + record.getAs[Double]("velocidade") + ",'" +
-          record.getAs[String]("sentido") + "',\"" + record.getAs[String]("trajeto") + "\")")
+          record.getAs[String]("sentido") + "',\"" +  record.getAs[String]("trajeto") + "',\"" + record.getAs[String]("corredor") + "\")")
       }
 
       def close(errorOrNull: Throwable): Unit = {
