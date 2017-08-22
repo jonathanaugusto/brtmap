@@ -64,7 +64,7 @@ object Main {
           "gpsdata (codigo, linha, latitude, longitude, datahora, velocidade, sentido, trajeto, corredor) VALUES ('" +
           record.getAs[String]("codigo") + "','" + record.getAs[String]("linha") + "'," + record.getAs[Double]("latitude") + "," +
           record.getAs[Double]("longitude") + ",'" + record.getAs[Timestamp]("datahora") + "'," + record.getAs[Double]("velocidade") + ",'" +
-          record.getAs[String]("sentido") + "',\"" +  record.getAs[String]("trajeto") + "',\"" + record.getAs[String]("corredor") + "\")")
+          record.getAs[String]("sentido") + "',\"" +  record.getAs[String]("trajeto") + "\",'" + record.getAs[String]("corredor") + "')")
       }
 
       def close(errorOrNull: Throwable): Unit = {
