@@ -1,6 +1,7 @@
 package BRTStreamReceiver
 
 import com.mysql.jdbc.Driver
+import org.apache.spark._
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
@@ -8,6 +9,7 @@ import org.apache.log4j.{ LogManager, Level, Logger }
 import org.apache.commons.logging.LogFactory
 import java.sql.{ Connection, Statement, Timestamp, DriverManager }
 import org.apache.spark.sql.streaming.ProcessingTime
+import Array._
 
 // Colocar no crontab:
 // * * * * *  curl -N http://webapibrt.rio.rj.gov.br/api/v1/brt -o /usr/local/data/brt_$(date +\%Y\%m\%d\%H\%M\%S).json
@@ -19,27 +21,29 @@ import org.apache.spark.sql.streaming.ProcessingTime
 
 object Main {
 
-  val veiculoType = StructType(
-    Array(
-      StructField("codigo", StringType),
-      StructField("linha", StringType),
-      StructField("latitude", DoubleType),
-      StructField("longitude", DoubleType),
-      StructField("datahora", DoubleType),
-      StructField("velocidade", DoubleType),
-      StructField("id_migracao", DoubleType),
-      StructField("sentido", StringType),
-      StructField("trajeto", StringType)))
-
-  val veiculosType = StructType(
-    Array(StructField("veiculos", ArrayType(veiculoType))))
-
+//    val veiculoType = StructType(
+//    Array(
+//      StructField("codigo", StringType),
+//      StructField("linha", StringType),
+//      StructField("latitude", DoubleType),
+//      StructField("longitude", DoubleType),
+//      StructField("datahora", DoubleType),
+//      StructField("velocidade", DoubleType),
+//      StructField("id_migracao", DoubleType),
+//      StructField("sentido", StringType),
+//      StructField("trajeto", StringType)))
+//
+//  val veiculosType = StructType(
+//    Array(StructField("veiculos", ArrayType(veiculoType))))
+  
   def main(args: Array[String]) {
     if (args.length < 2) {
       System.err.println("Usage: BRTStreamReceiver <files_dir> <mysql_conn> <mysql_usr> <mysql_pwd>")
       System.exit(1)
     }
 
+    //SparkConf sparkConf = new SparkConf().setAppName("BRTStreamReceiver").setMaster("local[2]").set("spark.executor.memory","1g");
+    
     val files_dir = args(0)
     val mysql_con = args(1)
     val mysql_usr = args(2)
@@ -83,16 +87,18 @@ object Main {
       .getOrCreate()
 
     import spark.implicits._
+    
 
-    val veiculos = spark.readStream
-      .schema(veiculosType)
-      .json(files_dir)
+    val veiculos = spark.readStream //.schema(veiculosType)
+        .json(files_dir)
+      
+      
 
     val a = veiculos.select(explode($"veiculos").as("veiculo"))
  
     val b = a
     .withColumn("codigo", ($"veiculo.codigo"))
-    .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora"/1000L)))
+    .withColumn("datahora", to_date(from_unixtime($"veiculo.datahora"/1000L)))
     .withColumn("codlinha", ($"veiculo.linha"))
     .withColumn("latitude", ($"veiculo.latitude"))
     .withColumn("longitude", ($"veiculo.longitude"))

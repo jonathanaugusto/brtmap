@@ -7,6 +7,7 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
 import org.apache.log4j.{LogManager, Level, Logger}
 import java.sql.Timestamp
+import Array._
 
 object Test {
   def main(args: Array[String]) {
@@ -27,22 +28,22 @@ object Test {
 //        longitude: Double, datahora: Timestamp, velocidade: Double)
 //  case class Veiculos (veiculos: Array[Veiculo])
   
-  val veiculoType = StructType(
-    Array(
-    StructField("codigo", StringType),
-    StructField("linha", StringType),
-    StructField("latitude", DoubleType),
-    StructField("longitude", DoubleType),
-    StructField("datahora", DoubleType),
-    StructField("velocidade", DoubleType),
-    StructField("id_migracao", DoubleType),
-    StructField("sentido", StringType),
-    StructField("trajeto", StringType)))
-        
-  val veiculosType = StructType(
-      Array(StructField("veiculos", ArrayType(veiculoType))))
+//  val veiculoType = StructType(
+//    Array(
+//    StructField("codigo", StringType),
+//    StructField("linha", StringType),
+//    StructField("latitude", DoubleType),
+//    StructField("longitude", DoubleType),
+//    StructField("datahora", DoubleType),
+//    StructField("velocidade", DoubleType),
+//    StructField("id_migracao", DoubleType),
+//    StructField("sentido", StringType),
+//    StructField("trajeto", StringType)))
+//        
+//  val veiculosType = StructType(
+//      Array(StructField("veiculos", ArrayType(veiculoType))))
     
-  val veiculos = spark.read.schema(veiculosType).json("hdfs://192.168.21.2:9000/user/ubuntu/data/brt_20170818132701.json")
+  val veiculos = spark.read.json("hdfs://192.168.21.2:9000/user/ubuntu/data/brt_20170818132701.json") //schema(veiculosType).
   
 // veiculos.printSchema()
 //  root
@@ -59,7 +60,7 @@ object Test {
   
   val b = a
   .withColumn("codigo", ($"veiculo.codigo"))
-  .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora"/1000L)))
+  .withColumn("datahora", to_date(from_unixtime($"veiculo.datahora"/1000L)))
   .withColumn("codlinha", ($"veiculo.linha"))
   .withColumn("latitude", ($"veiculo.latitude"))
   .withColumn("longitude", ($"veiculo.longitude"))
