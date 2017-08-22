@@ -80,6 +80,7 @@ object Main {
     val spark = SparkSession
       .builder
       .appName("BRTStreamReceiver")
+      .master("local[*]")
       .getOrCreate()
 
     import spark.implicits._
@@ -92,7 +93,7 @@ object Main {
  
     val b = a
     .withColumn("codigo", ($"veiculo.codigo"))
-    .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora"/1000L)))
+    .withColumn("datahora", to_date(from_unixtime($"veiculo.datahora"/1000L)))
     .withColumn("codlinha", ($"veiculo.linha"))
     .withColumn("latitude", ($"veiculo.latitude"))
     .withColumn("longitude", ($"veiculo.longitude"))
