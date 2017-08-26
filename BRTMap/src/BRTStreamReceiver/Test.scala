@@ -42,7 +42,9 @@ object Test {
   val veiculosType = StructType(
       Array(StructField("veiculos", ArrayType(veiculoType))))
     
-  val veiculos = spark.read.schema(veiculosType).json("hdfs://192.168.21.2:9000/user/ubuntu/data/brt_20170818132701.json")
+  val veiculos = spark.read.schema(veiculosType).json("file:///usr/local/data/brt_20170817182501.json")
+  
+  
   
 // veiculos.printSchema()
 //  root
