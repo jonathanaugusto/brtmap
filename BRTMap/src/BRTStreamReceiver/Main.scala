@@ -7,7 +7,7 @@ import org.apache.spark.sql.types._
 import org.apache.log4j.{ LogManager, Level, Logger }
 import org.apache.commons.logging.LogFactory
 import java.sql.{ Connection, Statement, Timestamp, DriverManager }
-import org.apache.spark.sql.streaming.ProcessingTime
+import org.apache.spark.sql.streaming.Trigger
 import java.sql.Date
 import java.util.Calendar
 
@@ -47,37 +47,7 @@ object Main {
     val mysql_usr = args(2)
     val mysql_pwd = args(3)
 
-    val writeGPSData = new ForeachWriter[Row] {
-      val driver = "com.mysql.jdbc.Driver"
-      var connection: Connection = _
-      var statement: Statement = _
-
-      def open(partitionId: Long, version: Long): Boolean = {
-        // open connection
-        Class.forName(driver)
-        connection = DriverManager.getConnection(mysql_con, mysql_usr, mysql_pwd)
-        statement = connection.createStatement
-        true
-      }
-
-      def process(record: Row) = {
-        // write string to connection
-        // val columnNames = record.schema.fieldNames
-        statement.executeUpdate("INSERT INTO " +
-          "gpsdata (codigo, linha, latitude, longitude, datahora, velocidade, sentido, trajeto) VALUES ('" +
-          record.getAs[String]("codigo") + "','" + record.getAs[String]("linha") + "'," + record.getAs[Double]("latitude") + "," +
-          record.getAs[Double]("longitude") + ",'" + record.getAs[Timestamp]("datahora") + "'," + record.getAs[Double]("velocidade") + ",'" +
-          record.getAs[String]("sentido") + "',\"" + record.getAs[String]("trajeto") + "\");")
-      }
-
-      def close(errorOrNull: Throwable): Unit = {
-        // close the connection
-        connection.close
-      }
-    }
-    
-    
-    val writeVelData = new ForeachWriter[Row] {
+    val writeToDB = new ForeachWriter[Row] {
       val driver = "com.mysql.jdbc.Driver"
       var connection: Connection = _
       var statement: Statement = _
@@ -94,19 +64,14 @@ object Main {
         // write string to connection
         val columnNames = record.schema.fieldNames.toList
         var command = "INSERT INTO "
-        if (columnNames contains "window") command += "agg_vel (" else command += "mean_vel ("
+        if (columnNames contains "window") command += "stats (" else command += "gpsdata ("
         command += columnNames.mkString(",")
-        command += ") VALUES ('"
-        command += record.mkString("','")
-        command += "');"
-        
+        command += ") VALUES (\""
+        command += record.mkString("\",\"")
+        command += "\");"
+
         statement.executeUpdate(command)
-        
-//        statement.executeUpdate("INSERT INTO " +
-//          "gpsdata (codigo, linha, latitude, longitude, datahora, velocidade, sentido, trajeto) VALUES ('" +
-//          record.getAs[String]("codigo") + "','" + record.getAs[String]("linha") + "'," + record.getAs[Double]("latitude") + "," +
-//          record.getAs[Double]("longitude") + ",'" + record.getAs[Timestamp]("datahora") + "'," + record.getAs[Double]("velocidade") + ",'" +
-//          record.getAs[String]("sentido") + "',\"" + record.getAs[String]("trajeto") + "\")")
+
       }
 
       def close(errorOrNull: Throwable): Unit = {
@@ -122,98 +87,99 @@ object Main {
     val spark = SparkSession
       .builder
       .appName("BRTStreamReceiver")
-      //.master("local[1]")
       .getOrCreate()
 
     import spark.implicits._
 
     val veiculos = spark.readStream
       .schema(veiculosType)
+      .option("maxFilesPerTrigger",1000)
       .json(files_dir)
-      
-      
 
     val a = veiculos.select(explode($"veiculos").as("veiculo"))
- 
+
     val b = a
-    .withColumn("codigo", ($"veiculo.codigo"))
-    .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora"/1000L)))
-    .withColumn("codlinha", ($"veiculo.linha"))
-    .withColumn("latitude", ($"veiculo.latitude"))
-    .withColumn("longitude", ($"veiculo.longitude"))
-    .withColumn("velocidade", ($"veiculo.velocidade"))
-    .withColumn("sentido", ($"veiculo.sentido"))
-    .withColumn("nome", ($"veiculo.trajeto"))
-    .drop($"veiculo")
-          
+      .withColumn("codigo", ($"veiculo.codigo"))
+      .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora" / 1000L)))
+      .withColumn("codlinha", ($"veiculo.linha"))
+      .withColumn("latitude", ($"veiculo.latitude"))
+      .withColumn("longitude", ($"veiculo.longitude"))
+      .withColumn("velocidade", ($"veiculo.velocidade"))
+      .withColumn("sentido", ($"veiculo.sentido"))
+      .withColumn("nome", ($"veiculo.trajeto"))
+      .drop($"veiculo")
+
     val c = b
-    .filter(!($"nome".isNull) && !($"codlinha".isNull))
-    
+      .filter(!($"nome".isNull) && !($"codlinha".isNull))
+
     val d = c
-    .filter(($"codlinha".like("5_____") || $"codlinha".like("__A") || $"codlinha".like("__")))
-        
+      .filter(($"codlinha".like("5_____") || $"codlinha".like("__A") || $"codlinha".like("__")))
+
     val e = d
-    .withColumn("linha", trim(split($"nome","-")(0)))
-    .withColumn("trajeto", trim(split($"nome","-")(1)))
-    .drop($"codlinha")
-    .drop($"nome")
-    
+      .withColumn("linha", trim(split($"nome", "-")(0)))
+      .withColumnRenamed("nome", "trajeto")
+      .drop($"codlinha")
+
     val f = e
-    .filter($"linha".like("___") || $"linha".like("__"))
-    
+      .filter($"linha".like("___") || $"linha".like("__"))
+
     val g = f
-    .withColumn("corredor",
-        when($"linha".like("1%") or $"linha".like("2%"),"TransOeste").otherwise(
-        when($"linha".like("3%") or $"linha".like("4%"),"TransCarioca").otherwise(
-        when($"linha".like("5%") ,"TransOlímpica").otherwise(""))))
-  
+      .withColumn("corredor",
+        when($"linha".like("1%") or $"linha".like("2%"), "TransOeste").otherwise(
+          when($"linha".like("3%") or $"linha".like("4%"), "TransCarioca").otherwise(
+            when($"linha".like("5%"), "TransOlímpica").otherwise(""))))
+
     val h = g.withWatermark("datahora", "10 minutes")
       .dropDuplicates("codigo", "datahora")
 
     val query = h.writeStream
       .outputMode("update")
-      .foreach(writeGPSData)
-      .trigger(ProcessingTime("1 minute"))
+      .foreach(writeToDB)
+//      .trigger(Trigger.ProcessingTime("1 minute"))
       .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint")
       .start()
-     
-   val i = h.filter($"velocidade" > 0).groupBy($"linha", $"sentido").avg("velocidade")
-   .withColumn("vel_media", $"avg(velocidade)")
-   .withColumn("datahora", current_timestamp())
-   .drop($"avg(velocidade)")
-   
-   val query2 = i.writeStream
+
+    val i = h//.filter($"velocidade" > 0)
+
+    val j = i.groupBy(window($"datahora", "1 minute"), $"linha", $"sentido").avg("velocidade")
+      .withColumn("vel_media", $"avg(velocidade)")
+      .withColumn("datahora", current_timestamp())
+      .drop($"avg(velocidade)")
+      .filter($"vel_media" > 0)
+
+    val query2 = i.writeStream
       .outputMode("update")
-      .foreach(writeVelData)
-      .trigger(ProcessingTime("1 minute"))
+      .foreach(writeToDB)
+//      .trigger(Trigger.ProcessingTime("1 minute"))
       .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint2")
       .start()
-      
-   val j = h.groupBy(window($"datahora", "1 hour"), $"linha", $"sentido").avg("velocidade")
-   .withColumn("vel_media", $"avg(velocidade)")
-   .withColumn("datahora", current_timestamp())
-   .drop($"avg(velocidade)")
-      
-   val query3 = j.writeStream
+
+    val k = i.groupBy(window($"datahora", "1 hour"), $"linha", $"sentido").avg("velocidade")
+      .withColumn("vel_media", $"avg(velocidade)")
+      .withColumn("datahora", current_timestamp())
+      .drop($"avg(velocidade)")
+      .filter($"vel_media" > 0)
+
+    val query3 = k.writeStream
       .outputMode("update")
-      .foreach(writeVelData)
-      .trigger(ProcessingTime("1 hour"))
-      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint3")
+      .foreach(writeToDB)
+      .trigger(Trigger.ProcessingTime("1 hour"))
+//      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint3")
       .start()
-    
-            
-   val l = h.groupBy(window($"datahora", "1 day"), $"linha", $"sentido").avg("velocidade")
-   .withColumn("vel_media", $"avg(velocidade)")
-   .withColumn("datahora", current_timestamp())
-   .drop($"avg(velocidade)")
-      
-   val query4 = l.writeStream
+
+    val l = i.groupBy(window($"datahora", "1 day"), $"linha", $"sentido").avg("velocidade")
+      .withColumn("vel_media", $"avg(velocidade)")
+      .withColumn("datahora", current_timestamp())
+      .drop($"avg(velocidade)")
+      .filter($"vel_media" > 0)
+
+    val query4 = l.writeStream
       .outputMode("update")
-      .foreach(writeVelData)
-      .trigger(ProcessingTime("1 day"))
-      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint4")
+      .foreach(writeToDB)
+      .trigger(Trigger.ProcessingTime("1 day"))
+//      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint4")
       .start()
-    
+
     query.awaitTermination()
     query2.awaitTermination()
     query3.awaitTermination()

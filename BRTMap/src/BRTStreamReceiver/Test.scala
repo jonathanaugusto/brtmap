@@ -78,9 +78,8 @@ object Test {
       
   val e = d
   .withColumn("linha", trim(split($"nome","-")(0)))
-  .withColumn("trajeto", trim(split($"nome","-")(1)))
+  .withColumnRenamed("nome", "trajeto")
   .drop($"codlinha")
-  .drop($"nome")
   
   val f = e
   .filter($"linha".like("___") || $"linha".like("__"))
@@ -90,11 +89,11 @@ object Test {
       when($"linha".like("1%") or $"linha".like("2%"),"TransOeste").otherwise(
       when($"linha".like("3%") or $"linha".like("4%"),"TransCarioca").otherwise(
       when($"linha".like("5%") ,"TransOlímpica").otherwise(""))))
+      
+  val k = g.groupBy($"linha", $"trajeto", $"sentido").avg("velocidade").orderBy("linha")
   
-  
-  println(g.count() + " carros")
-  g.printSchema()
-  g.show(20)
+  k.printSchema()
+  k.show(200, false)
   
   }
   
