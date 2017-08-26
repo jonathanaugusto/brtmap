@@ -41,7 +41,7 @@ object Main {
       System.err.println("Usage: BRTStreamReceiver <files_dir> <mysql_conn> <mysql_usr> <mysql_pwd>")
       System.exit(1)
     }
-
+    SparkConf sparkConf = new SparkConf().setAppName("BRTStreamReceiver").setMaster("local[2]").set("spark.executor.memory","1g");
     //SparkConf sparkConf = new SparkConf().setAppName("BRTStreamReceiver").setMaster("local[2]").set("spark.executor.memory","1g");
     
     val files_dir = args(0)
