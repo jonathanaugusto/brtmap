@@ -64,7 +64,9 @@ object Main {
         // write string to connection
         val columnNames = record.schema.fieldNames.toList
         var command = "INSERT INTO "
-        if (columnNames contains "window") command += "stats (" else command += "gpsdata ("
+        if       (columnNames contains "vel_media")   command += "stats_vel (" 
+        else if  (columnNames contains "qtd_carros")  command += "stats_qtd ("
+        else                                          command += "gpsdata ("
         command += columnNames.mkString(",")
         command += ") VALUES (\""
         command += record.mkString("\",\"")
@@ -138,34 +140,32 @@ object Main {
       .start()
 
       
-    // Query 2: agrupamento por hora
-    val group1h = realtimedata.groupBy(window($"datahora", "1 hour"), $"linha", $"sentido")
-      .agg(avg("velocidade"), count("codigo"))
-      .withColumn("window_start", ($"window.start"))
-      .withColumn("window_end", ($"window.end"))
+    // Query 2: média de velocidade - janela de 1 hora
+    val group2 = realtimedata.groupBy(window($"datahora", "1 hour"), $"corredor")
+      .agg(avg("velocidade"))
+      .withColumn("data", to_date(date_format($"window.start", "yyyy-MM-dd")))
+      .withColumn("hora", date_format($"window.start", "HH:mm"))
       .drop($"window")
       .withColumnRenamed("avg(velocidade)", "vel_media")
-      .withColumnRenamed("count(codigo)", "qtd_carros")
-      .withColumn("datahora", current_timestamp())
+      .withColumn("atualizacao", current_timestamp())
       
-    val query2 = group1h.writeStream
+    val query2 = group2.writeStream
       .outputMode("update")
       .foreach(writeToDB)
 //      .trigger(Trigger.ProcessingTime("1 hour"))
 //      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint3")
       .start()
 
-    // Query 3: agrupamento por dia
-    val group1d = realtimedata.groupBy(window($"datahora", "1 day"), $"linha", $"sentido")
-      .agg(avg("velocidade"), count("codigo"))
-      .withColumn("window_start", ($"window.start"))
-      .withColumn("window_end", ($"window.end"))
+    // Query 3: quantidade de carros - janela de 1 hora
+    val group3 = realtimedata.groupBy(window($"datahora", "1 hour"), $"corredor")
+      .agg(approx_count_distinct("codigo"))
+      .withColumn("data", to_date(date_format($"window.start", "yyyy-MM-dd")))
+      .withColumn("hora", date_format($"window.start", "HH:mm"))
       .drop($"window")
-      .withColumnRenamed("avg(velocidade)", "vel_media")
       .withColumnRenamed("count(codigo)", "qtd_carros")
-      .withColumn("datahora", current_timestamp())
+      .withColumn("atualizacao", current_timestamp())
       
-    val query3 = group1d.writeStream
+    val query3 = group3.writeStream
       .outputMode("update")
       .foreach(writeToDB)
 //      .trigger(Trigger.ProcessingTime("1 day"))

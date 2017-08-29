@@ -87,18 +87,31 @@ object Test {
       .drop($"codlinha")
 
 //window($"datahora", "1 hour"),
-  val k = pre5.groupBy(window($"datahora", "10 minutes"), $"linha", $"sentido")
-      .agg(avg("velocidade"), count("codigo"))
-      .withColumn("window_start", ($"window.start"))
-      .withColumn("window_end", ($"window.end"))
+  val k = pre5.groupBy(window($"datahora", "10 minutes"), $"corredor")
+      .agg(avg("velocidade"))
+      .withColumn("data", to_date(date_format($"window.start", "yyyy-MM-dd")))
+      .withColumn("hora", date_format($"window.start", "HH:mm"))
       .drop($"window")
       .withColumnRenamed("avg(velocidade)", "vel_media")
-      .withColumnRenamed("count(codigo)", "qtd_carros")
-      .withColumn("datahora", current_timestamp())
+      .withColumn("atualizacao", current_timestamp())
 
   
   k.printSchema()
   k.show(200, false)
+  
+  
+//window($"datahora", "1 hour"),
+  val l = pre5.groupBy(window($"datahora", "10 minutes"), $"corredor")
+      .agg(countDistinct("codigo"))
+      .withColumn("data", to_date(date_format($"window.start", "yyyy-MM-dd")))
+      .withColumn("hora", date_format($"window.start", "HH:mm"))
+      .drop($"window")
+      .withColumnRenamed("count(codigo)", "qtd_carros")
+      .withColumn("atualizacao", current_timestamp())
+
+  
+  l.printSchema()
+  l.show(200, false)
   
   }
   
