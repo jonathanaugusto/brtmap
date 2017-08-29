@@ -148,6 +148,7 @@ object Main {
       .drop($"window")
       .withColumnRenamed("avg(velocidade)", "vel_media")
       .withColumn("atualizacao", current_timestamp())
+      .filter($"vel_media" > 0)
       
     val query2 = group2.writeStream
       .outputMode("update")
@@ -164,6 +165,7 @@ object Main {
       .drop($"window")
       .withColumnRenamed("approx_count_distinct(codigo)", "qtd_carros")
       .withColumn("atualizacao", current_timestamp())
+      .filter($"qtd_carros" > 0)
       
     val query3 = group3.writeStream
       .outputMode("update")
