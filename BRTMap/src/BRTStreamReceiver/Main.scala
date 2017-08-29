@@ -162,7 +162,7 @@ object Main {
       .withColumn("data", to_date(date_format($"window.start", "yyyy-MM-dd")))
       .withColumn("hora", date_format($"window.start", "HH:mm"))
       .drop($"window")
-      .withColumnRenamed("count(codigo)", "qtd_carros")
+      .withColumnRenamed("approx_count_distinct(codigo)", "qtd_carros")
       .withColumn("atualizacao", current_timestamp())
       
     val query3 = group3.writeStream
