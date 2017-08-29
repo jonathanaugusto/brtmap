@@ -96,9 +96,9 @@ object Main {
       .option("maxFilesPerTrigger",1000)
       .json(files_dir)
 
-    val a = veiculos.select(explode($"veiculos").as("veiculo"))
+    val pre1 = veiculos.select(explode($"veiculos").as("veiculo"))
 
-    val b = a
+    val pre2 = pre1
       .withColumn("codigo", ($"veiculo.codigo"))
       .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora" / 1000L)))
       .withColumn("codlinha", ($"veiculo.linha"))
@@ -108,81 +108,72 @@ object Main {
       .withColumn("sentido", ($"veiculo.sentido"))
       .withColumn("nome", ($"veiculo.trajeto"))
       .drop($"veiculo")
-
-    val c = b
+      
+    val pre3 = pre2
       .filter(!($"nome".isNull) && !($"codlinha".isNull))
-
-    val d = c
       .filter(($"codlinha".like("5_____") || $"codlinha".like("__A") || $"codlinha".like("__")))
-
-    val e = d
+      
+    val pre4 = pre3
       .withColumn("linha", trim(split($"nome", "-")(0)))
+      .filter($"linha".like("___") || $"linha".like("__"))
+      .withColumn("corredor",
+       when($"linha".like("1%") or $"linha".like("2%"), "TransOeste").otherwise(
+       when($"linha".like("3%") or $"linha".like("4%"), "TransCarioca").otherwise(
+       when($"linha".like("5%"), "TransOlímpica").otherwise(""))))
+            
+    val pre5 = pre4
       .withColumnRenamed("nome", "trajeto")
       .drop($"codlinha")
 
-    val f = e
-      .filter($"linha".like("___") || $"linha".like("__"))
-
-    val g = f
-      .withColumn("corredor",
-        when($"linha".like("1%") or $"linha".like("2%"), "TransOeste").otherwise(
-          when($"linha".like("3%") or $"linha".like("4%"), "TransCarioca").otherwise(
-            when($"linha".like("5%"), "TransOlímpica").otherwise(""))))
-
-    val h = g.withWatermark("datahora", "10 minutes")
+    val realtimedata = pre5
+      .withWatermark("datahora", "10 minutes")
       .dropDuplicates("codigo", "datahora")
 
-    val query = h.writeStream
+    // Query 1: dados em tempo real
+    val query1 = realtimedata.writeStream
       .outputMode("update")
       .foreach(writeToDB)
 //      .trigger(Trigger.ProcessingTime("1 minute"))
-      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint")
+//      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint")
       .start()
 
-    val i = h//.filter($"velocidade" > 0)
-
-    val j = i.groupBy(window($"datahora", "1 minute"), $"linha", $"sentido").avg("velocidade")
-      .withColumn("vel_media", $"avg(velocidade)")
+      
+    // Query 2: agrupamento por hora
+    val group1h = realtimedata.groupBy(window($"datahora", "1 hour"), $"linha", $"sentido")
+      .agg(avg("velocidade"), count("codigo"))
+      .withColumn("window_start", ($"window.start"))
+      .withColumn("window_end", ($"window.end"))
+      .drop($"window")
+      .withColumnRenamed("avg(velocidade)", "vel_media")
+      .withColumnRenamed("count(codigo)", "qtd_carros")
       .withColumn("datahora", current_timestamp())
-      .drop($"avg(velocidade)")
-      .filter($"vel_media" > 0)
-
-    val query2 = i.writeStream
+      
+    val query2 = group1h.writeStream
       .outputMode("update")
       .foreach(writeToDB)
-//      .trigger(Trigger.ProcessingTime("1 minute"))
-      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint2")
-      .start()
-
-    val k = i.groupBy(window($"datahora", "1 hour"), $"linha", $"sentido").avg("velocidade")
-      .withColumn("vel_media", $"avg(velocidade)")
-      .withColumn("datahora", current_timestamp())
-      .drop($"avg(velocidade)")
-      .filter($"vel_media" > 0)
-
-    val query3 = k.writeStream
-      .outputMode("update")
-      .foreach(writeToDB)
-      .trigger(Trigger.ProcessingTime("1 hour"))
+//      .trigger(Trigger.ProcessingTime("1 hour"))
 //      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint3")
       .start()
 
-    val l = i.groupBy(window($"datahora", "1 day"), $"linha", $"sentido").avg("velocidade")
-      .withColumn("vel_media", $"avg(velocidade)")
+    // Query 3: agrupamento por dia
+    val group1d = realtimedata.groupBy(window($"datahora", "1 day"), $"linha", $"sentido")
+      .agg(avg("velocidade"), count("codigo"))
+      .withColumn("window_start", ($"window.start"))
+      .withColumn("window_end", ($"window.end"))
+      .drop($"window")
+      .withColumnRenamed("avg(velocidade)", "vel_media")
+      .withColumnRenamed("count(codigo)", "qtd_carros")
       .withColumn("datahora", current_timestamp())
-      .drop($"avg(velocidade)")
-      .filter($"vel_media" > 0)
-
-    val query4 = l.writeStream
+      
+    val query3 = group1d.writeStream
       .outputMode("update")
       .foreach(writeToDB)
-      .trigger(Trigger.ProcessingTime("1 day"))
+//      .trigger(Trigger.ProcessingTime("1 day"))
 //      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint4")
       .start()
 
-    query.awaitTermination()
+    query1.awaitTermination()
     query2.awaitTermination()
     query3.awaitTermination()
-    query4.awaitTermination()
   }
 }

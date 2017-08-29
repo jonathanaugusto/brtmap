@@ -60,37 +60,42 @@ object Test {
   val a = veiculos.select(explode($"veiculos").as("veiculo"))
   
   val b = a
-  .withColumn("codigo", ($"veiculo.codigo"))
-  .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora"/1000L)))
-  .withColumn("codlinha", ($"veiculo.linha"))
-  .withColumn("latitude", ($"veiculo.latitude"))
-  .withColumn("longitude", ($"veiculo.longitude"))
-  .withColumn("velocidade", ($"veiculo.velocidade"))
-  .withColumn("sentido", ($"veiculo.sentido"))
-  .withColumn("nome", ($"veiculo.trajeto"))
-  .drop($"veiculo")
-        
-  val c = b
-  .filter(!($"nome".isNull) && !($"codlinha".isNull))
-  
-  val d = c
-  .filter(($"codlinha".like("5_____") || $"codlinha".like("__A") || $"codlinha".like("__")))
+        .withColumn("codigo", ($"veiculo.codigo"))
+      .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora" / 1000L)))
+      .withColumn("codlinha", ($"veiculo.linha"))
+      .withColumn("latitude", ($"veiculo.latitude"))
+      .withColumn("longitude", ($"veiculo.longitude"))
+      .withColumn("velocidade", ($"veiculo.velocidade"))
+      .withColumn("sentido", ($"veiculo.sentido"))
+      .withColumn("nome", ($"veiculo.trajeto"))
+      .drop($"veiculo")
       
-  val e = d
-  .withColumn("linha", trim(split($"nome","-")(0)))
-  .withColumnRenamed("nome", "trajeto")
-  .drop($"codlinha")
-  
-  val f = e
-  .filter($"linha".like("___") || $"linha".like("__"))
-  
-  val g = f
-  .withColumn("corredor",
-      when($"linha".like("1%") or $"linha".like("2%"),"TransOeste").otherwise(
-      when($"linha".like("3%") or $"linha".like("4%"),"TransCarioca").otherwise(
-      when($"linha".like("5%") ,"TransOlímpica").otherwise(""))))
+    val pre3 = b
+      .filter(!($"nome".isNull) && !($"codlinha".isNull))
+      .filter(($"codlinha".like("5_____") || $"codlinha".like("__A") || $"codlinha".like("__")))
       
-  val k = g.groupBy($"linha", $"trajeto", $"sentido").avg("velocidade").orderBy("linha")
+    val pre4 = pre3
+      .withColumn("linha", trim(split($"nome", "-")(0)))
+      .filter($"linha".like("___") || $"linha".like("__"))
+      .withColumn("corredor",
+       when($"linha".like("1%") or $"linha".like("2%"), "TransOeste").otherwise(
+       when($"linha".like("3%") or $"linha".like("4%"), "TransCarioca").otherwise(
+       when($"linha".like("5%"), "TransOlímpica").otherwise(""))))
+            
+    val pre5 = pre4
+      .withColumnRenamed("nome", "trajeto")
+      .drop($"codlinha")
+
+//window($"datahora", "1 hour"),
+  val k = pre5.groupBy(window($"datahora", "10 minutes"), $"linha", $"sentido")
+      .agg(avg("velocidade"), count("codigo"))
+      .withColumn("window_start", ($"window.start"))
+      .withColumn("window_end", ($"window.end"))
+      .drop($"window")
+      .withColumnRenamed("avg(velocidade)", "vel_media")
+      .withColumnRenamed("count(codigo)", "qtd_carros")
+      .withColumn("datahora", current_timestamp())
+
   
   k.printSchema()
   k.show(200, false)
