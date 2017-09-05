@@ -42,7 +42,9 @@ object Test {
   val veiculosType = StructType(
       Array(StructField("veiculos", ArrayType(veiculoType))))
     
-  val veiculos = spark.read.schema(veiculosType).json("hdfs://192.168.21.2:9000/user/ubuntu/data/brt_20170818132701.json")
+  val veiculos = spark.read.schema(veiculosType).json("file:///usr/local/data/brt_20170817182501.json")
+  
+  
   
 // veiculos.printSchema()
 //  root
@@ -57,42 +59,58 @@ object Test {
   
   val a = veiculos.select(explode($"veiculos").as("veiculo"))
   
-  val b = a
-  .withColumn("codigo", ($"veiculo.codigo"))
-  .withColumn("datahora", to_date(from_unixtime($"veiculo.datahora"/1000L)))
-  .withColumn("codlinha", ($"veiculo.linha"))
-  .withColumn("latitude", ($"veiculo.latitude"))
-  .withColumn("longitude", ($"veiculo.longitude"))
-  .withColumn("velocidade", ($"veiculo.velocidade"))
-  .withColumn("sentido", ($"veiculo.sentido"))
-  .withColumn("nome", ($"veiculo.trajeto"))
-  .drop($"veiculo")
-        
-  val c = b
-  .filter(!($"nome".isNull) && !($"codlinha".isNull))
-  
-  val d = c
-  .filter(($"codlinha".like("5_____") || $"codlinha".like("__A") || $"codlinha".like("__")))
+  val b = a.withColumn("codigo", ($"veiculo.codigo"))
+      .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora" / 1000L)))
+      .withColumn("codlinha", ($"veiculo.linha"))
+      .withColumn("latitude", ($"veiculo.latitude"))
+      .withColumn("longitude", ($"veiculo.longitude"))
+      .withColumn("velocidade", ($"veiculo.velocidade"))
+      .withColumn("sentido", ($"veiculo.sentido"))
+      .withColumn("nome", ($"veiculo.trajeto"))
+      .drop($"veiculo")
       
-  val e = d
-  .withColumn("linha", trim(split($"nome","-")(0)))
-  .withColumn("trajeto", trim(split($"nome","-")(1)))
-  .drop($"codlinha")
-  .drop($"nome")
+    val pre3 = b
+      .filter(!($"nome".isNull) && !($"codlinha".isNull))
+      .filter(($"codlinha".like("5_____") || $"codlinha".like("__A") || $"codlinha".like("__")))
+      
+    val pre4 = pre3
+      .withColumn("linha", trim(split($"nome", "-")(0)))
+      .filter($"linha".like("___") || $"linha".like("__"))
+      .withColumn("corredor",
+       when($"linha".like("1%") or $"linha".like("2%"), "TransOeste").otherwise(
+       when($"linha".like("3%") or $"linha".like("4%"), "TransCarioca").otherwise(
+       when($"linha".like("5%"), "TransOlímpica").otherwise(""))))
+            
+    val pre5 = pre4
+      .withColumnRenamed("nome", "trajeto")
+      .drop($"codlinha")
+
+//window($"datahora", "1 hour"),
+  val k = pre5.groupBy(window($"datahora", "10 minutes"), $"corredor")
+      .agg(avg("velocidade"))
+      .withColumn("data", to_date(date_format($"window.start", "yyyy-MM-dd")))
+      .withColumn("hora", date_format($"window.start", "HH:mm"))
+      .drop($"window")
+      .withColumnRenamed("avg(velocidade)", "vel_media")
+      .withColumn("atualizacao", current_timestamp())
+
   
-  val f = e
-  .filter($"linha".like("___") || $"linha".like("__"))
-  
-  val g = f
-  .withColumn("corredor",
-      when($"linha".like("1%") or $"linha".like("2%"),"TransOeste").otherwise(
-      when($"linha".like("3%") or $"linha".like("4%"),"TransCarioca").otherwise(
-      when($"linha".like("5%") ,"TransOlímpica").otherwise(""))))
+  k.printSchema()
+  k.show(200, false)
   
   
-  println(g.count() + " carros")
-  g.printSchema()
-  g.show(20)
+//window($"datahora", "1 hour"),
+  val l = pre5.groupBy(window($"datahora", "10 minutes"), $"corredor")
+      .agg(countDistinct("codigo"))
+      .withColumn("data", to_date(date_format($"window.start", "yyyy-MM-dd")))
+      .withColumn("hora", date_format($"window.start", "HH:mm"))
+      .drop($"window")
+      .withColumnRenamed("count(codigo)", "qtd_carros")
+      .withColumn("atualizacao", current_timestamp())
+
+  
+  l.printSchema()
+  l.show(200, false)
   
   }
   

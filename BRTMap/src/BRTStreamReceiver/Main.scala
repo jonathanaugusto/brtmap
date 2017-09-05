@@ -7,7 +7,9 @@ import org.apache.spark.sql.types._
 import org.apache.log4j.{ LogManager, Level, Logger }
 import org.apache.commons.logging.LogFactory
 import java.sql.{ Connection, Statement, Timestamp, DriverManager }
-import org.apache.spark.sql.streaming.ProcessingTime
+import org.apache.spark.sql.streaming.Trigger
+import java.sql.Date
+import java.util.Calendar
 
 // Colocar no crontab:
 // * * * * *  curl -N http://webapibrt.rio.rj.gov.br/api/v1/brt -o /usr/local/data/brt_$(date +\%Y\%m\%d\%H\%M\%S).json
@@ -60,11 +62,17 @@ object Main {
 
       def process(record: Row) = {
         // write string to connection
-        statement.executeUpdate("INSERT INTO " +
-          "gpsdata (codigo, linha, latitude, longitude, datahora, velocidade, sentido, trajeto, corredor) VALUES ('" +
-          record.getAs[String]("codigo") + "','" + record.getAs[String]("linha") + "'," + record.getAs[Double]("latitude") + "," +
-          record.getAs[Double]("longitude") + ",'" + record.getAs[Timestamp]("datahora") + "'," + record.getAs[Double]("velocidade") + ",'" +
-          record.getAs[String]("sentido") + "',\"" +  record.getAs[String]("trajeto") + "\",'" + record.getAs[String]("corredor") + "')")
+        val columnNames = record.schema.fieldNames.toList
+        var command = "INSERT INTO "
+        if       (columnNames contains "vel_media")   command += "stats_vel (" 
+        else if  (columnNames contains "qtd_carros")  command += "stats_qtd ("
+        else                                          command += "gpsdata ("
+        command += columnNames.mkString(",")
+        command += ") VALUES (\""
+        command += record.mkString("\",\"")
+        command += "\");"
+
+        statement.executeUpdate(command)
       }
 
       def close(errorOrNull: Throwable): Unit = {
@@ -87,52 +95,88 @@ object Main {
 
     val veiculos = spark.readStream
       .schema(veiculosType)
+      .option("maxFilesPerTrigger",1000)
       .json(files_dir)
 
-    val a = veiculos.select(explode($"veiculos").as("veiculo"))
- 
-    val b = a
-    .withColumn("codigo", ($"veiculo.codigo"))
-    .withColumn("datahora", to_date(from_unixtime($"veiculo.datahora"/1000L)))
-    .withColumn("codlinha", ($"veiculo.linha"))
-    .withColumn("latitude", ($"veiculo.latitude"))
-    .withColumn("longitude", ($"veiculo.longitude"))
-    .withColumn("velocidade", ($"veiculo.velocidade"))
-    .withColumn("sentido", ($"veiculo.sentido"))
-    .withColumn("nome", ($"veiculo.trajeto"))
-    .drop($"veiculo")
-          
-    val c = b
-    .filter(!($"nome".isNull) && !($"codlinha".isNull))
-    
-    val d = c
-    .filter(($"codlinha".like("5_____") || $"codlinha".like("__A") || $"codlinha".like("__")))
-        
-    val e = d
-    .withColumn("linha", trim(split($"nome","-")(0)))
-    .withColumn("trajeto", trim(split($"nome","-")(1)))
-    .drop($"codlinha")
-    .drop($"nome")
-    
-    val f = e
-    .filter($"linha".like("___") || $"linha".like("__"))
-    
-    val g = f
-    .withColumn("corredor",
-        when($"linha".like("1%") or $"linha".like("2%"),"TransOeste").otherwise(
-        when($"linha".like("3%") or $"linha".like("4%"),"TransCarioca").otherwise(
-        when($"linha".like("5%") ,"TransOlímpica").otherwise(""))))
-  
-    val h = g.withWatermark("datahora", "10 minutes")
+
+    val pre1 = veiculos.select(explode($"veiculos").as("veiculo"))
+
+    val pre2 = pre1
+      .withColumn("codigo", ($"veiculo.codigo"))
+      .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora" / 1000L)))
+      .withColumn("codlinha", ($"veiculo.linha"))
+      .withColumn("latitude", ($"veiculo.latitude"))
+      .withColumn("longitude", ($"veiculo.longitude"))
+      .withColumn("velocidade", ($"veiculo.velocidade"))
+      .withColumn("sentido", ($"veiculo.sentido"))
+      .withColumn("nome", ($"veiculo.trajeto"))
+      .drop($"veiculo")
+      
+    val pre3 = pre2
+      .filter(!($"nome".isNull) && !($"codlinha".isNull))
+      .filter(($"codlinha".like("5_____") || $"codlinha".like("__A") || $"codlinha".like("__")))
+      
+    val pre4 = pre3
+      .withColumn("linha", trim(split($"nome", "-")(0)))
+      .filter($"linha".like("___") || $"linha".like("__"))
+      .withColumn("corredor",
+       when($"linha".like("1%") or $"linha".like("2%"), "TransOeste").otherwise(
+       when($"linha".like("3%") or $"linha".like("4%"), "TransCarioca").otherwise(
+       when($"linha".like("5%"), "TransOlímpica").otherwise(""))))
+            
+    val pre5 = pre4
+      .withColumnRenamed("nome", "trajeto")
+      .drop($"codlinha")
+
+    val realtimedata = pre5
+      .withWatermark("datahora", "10 minutes")
       .dropDuplicates("codigo", "datahora")
 
-    val query = h.writeStream
+    // Query 1: dados em tempo real
+    val query1 = realtimedata.writeStream
       .outputMode("update")
       .foreach(writeToDB)
-      //.format("console")
-      .trigger(ProcessingTime("1 minute"))
+//      .trigger(Trigger.ProcessingTime("1 minute"))
+//      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint")
       .start()
 
-    query.awaitTermination()
+      
+    // Query 2: média de velocidade - janela de 1 hora
+    val group2 = realtimedata.groupBy(window($"datahora", "1 hour"), $"corredor")
+      .agg(avg("velocidade"))
+      .withColumn("data", to_date(date_format($"window.start", "yyyy-MM-dd")))
+      .withColumn("hora", date_format($"window.start", "HH:mm"))
+      .drop($"window")
+      .withColumnRenamed("avg(velocidade)", "vel_media")
+      .withColumn("atualizacao", current_timestamp())
+      .filter($"vel_media" > 0)
+      
+    val query2 = group2.writeStream
+      .outputMode("update")
+      .foreach(writeToDB)
+//      .trigger(Trigger.ProcessingTime("1 hour"))
+//      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint3")
+      .start()
+
+    // Query 3: quantidade de carros - janela de 1 hora
+    val group3 = realtimedata.groupBy(window($"datahora", "1 hour"), $"corredor")
+      .agg(approx_count_distinct("codigo"))
+      .withColumn("data", to_date(date_format($"window.start", "yyyy-MM-dd")))
+      .withColumn("hora", date_format($"window.start", "HH:mm"))
+      .drop($"window")
+      .withColumnRenamed("approx_count_distinct(codigo)", "qtd_carros")
+      .withColumn("atualizacao", current_timestamp())
+      .filter($"qtd_carros" > 0)
+      
+    val query3 = group3.writeStream
+      .outputMode("update")
+      .foreach(writeToDB)
+//      .trigger(Trigger.ProcessingTime("1 day"))
+//      .option("checkpointLocation", "hdfs://192.168.21.2:9000/user/ubuntu/checkpoint4")
+      .start()
+
+    query1.awaitTermination()
+    query2.awaitTermination()
+    query3.awaitTermination()
   }
 }
