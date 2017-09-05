@@ -1,0 +1,82 @@
+[
+	{
+		"estacao": "Terminal Jardim Oceanico",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.006718", 
+		"longitude": "-43.312503"
+	},
+	{
+		"estacao": "Bosque Marapendi",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.003928", 
+		"longitude": "-43.322782"
+	},
+	{ 
+		"estacao": "Paulo Malta Rezende",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.001322", 
+		"longitude": "-43.329131"
+	},
+	{ 
+		"estacao": "Afrânio Costa",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.000611",  
+		"longitude": "-43.335135"
+	},
+	{ 
+		"estacao": "Riviera",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.000258",  
+		"longitude": "-43.342076"
+	},
+	{ 
+		"estacao": "Ricardo Marinho",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.000184",  
+		"longitude": "-43.346567"
+	},
+	{ 
+		"estacao": "Pq. das Rosas",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.000063",  
+		"longitude": "-43.352425"
+	},
+	{ 
+		"estacao": "Barra Shopping",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.000003",  
+		"longitude": "-43.359814"
+	}
+]

@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "__init__.py", line 1, in <module>
+    from flask import Flask, redirect, url_for, request, render_template
+ImportError: No module named flask
+Traceback (most recent call last):
+  File "__init__.py", line 1, in <module>
+    from flask import Flask, redirect, url_for, request, render_template
+ImportError: No module named flask
+ * Running on http://127.0.0.1:5555/ (Press CTRL+C to quit)
+127.0.0.1 - - [25/Aug/2017 19:52:16] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2017 19:52:16] "GET /static/bootstrap.css HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2017 19:52:16] "GET /static/bootstrap-selector.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2017 19:52:16] "GET /static/jquery.js HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2017 19:52:16] "GET /static/bootstrap.js HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2017 19:52:16] "GET /static/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2017 19:52:16] "GET /static/d3.min.js HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2017 19:52:16] "GET /static/map.js HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2017 19:52:16] "GET /static/chart.js HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2017 19:52:16] "GET /static/heatmap.min.js HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2017 19:52:16] "GET /static/gmaps-heatmap.js HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2017 19:52:17] "GET /static/estacoes.json HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2017 19:52:19] "POST /brtpos HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2017 19:52:19] "GET /static/estacao.png HTTP/1.1" 304 -

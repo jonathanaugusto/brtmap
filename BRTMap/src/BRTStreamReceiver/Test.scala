@@ -59,7 +59,8 @@ object Test {
   
   val a = veiculos.select(explode($"veiculos").as("veiculo"))
   
-  val b = a.withColumn("codigo", ($"veiculo.codigo"))
+  val b = a
+        .withColumn("codigo", ($"veiculo.codigo"))
       .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora" / 1000L)))
       .withColumn("codlinha", ($"veiculo.linha"))
       .withColumn("latitude", ($"veiculo.latitude"))

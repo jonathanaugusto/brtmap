@@ -17,7 +17,7 @@ import java.util.Calendar
 // * * * * *  curl -N http://webapibrt.rio.rj.gov.br/api/v1/brt | /usr/local/hadoop/bin/hdfs dfs -put - /user/ubuntu/data/brt_$(date +\%Y\%m\%d\%H\%M\%S).json
 
 // Pra rodar no spark-submit:
-// bin/spark-submit --master spark://<host>:7077 --jars ../BRTStreamReceiver/mysql-connector-java-5.1.43-bin.jar --num-executors 3 --driver-memory 2g --executor-memory 1g --executor-cores 1 --class BRTStreamReceiver.Main ../BRTStreamReceiver/BRTStreamReceiver.jar <args>
+// bin/spark-submit --master spark://<host>:7077 --jars ../BRTStreamReceiver/mysql-connector-java-5.1.43-bin.jar --num-executors 3 --driver-memory 2g --executor-memory 1g --executor-cores 1 --class BRTStreamReceiver.Main main.scala.BRTStreamReceiver ../BRTStreamReceiver/BRTStreamReceiver.jar <args>
 
 object Main {
 
@@ -73,6 +73,7 @@ object Main {
         command += "\");"
 
         statement.executeUpdate(command)
+
       }
 
       def close(errorOrNull: Throwable): Unit = {
@@ -88,7 +89,6 @@ object Main {
     val spark = SparkSession
       .builder
       .appName("BRTStreamReceiver")
-      .master("local[*]")
       .getOrCreate()
 
     import spark.implicits._
@@ -97,7 +97,6 @@ object Main {
       .schema(veiculosType)
       .option("maxFilesPerTrigger",1000)
       .json(files_dir)
-
 
     val pre1 = veiculos.select(explode($"veiculos").as("veiculo"))
 
