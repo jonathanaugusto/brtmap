@@ -1,0 +1,1082 @@
+[
+	{
+		"estacao": "Aeroporto de Jacarepaguá",
+		"horarioestacao": "05h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Ayrton Senna",
+		"numero": "2550",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-22.989039",
+		"longitude": "-43.365826"
+	},
+	{
+		"estacao": "André Rocha",
+		"horarioestacao": "05h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Rua Andre Rocha",
+		"numero": "687",
+		"bairro": "Taquara",
+		"latitude": "-22.929493",
+		"longitude": "-43.373454"
+	},
+	{
+		"estacao": "Aracy Cabral",
+		"horarioestacao": "05h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Nelson Cardoso",
+		"numero": "850",
+		"bairro": "Tanque",
+		"latitude": "-22.920156",
+		"longitude": "-43.368215"
+	},
+	{
+		"estacao": "Arroio Pavuna",
+		"horarioestacao": "05h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Estrada dos Bandeirantes",
+		"numero": "3997",
+		"bairro": "Jacarepaguá",
+		"latitude": "-22.955290",
+		"longitude": "-43.377384"
+	},
+	{
+		"estacao": "Campinho",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Rua Domingos Lopes",
+		"numero": "77",
+		"bairro": "Madureira",
+		"latitude": "-22.882132",
+		"longitude": "-43.341905"
+	},
+	{
+		"estacao": "Capitão Menezes",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Rua Cândido Benício",
+		"numero": "1236",
+		"bairro": "Campinho",
+		"latitude": "-22.892930",
+		"longitude": "-43.348655"
+	},
+	{
+		"estacao": "Cardoso de Moraes - Viúva Garcia",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Rua Cardoso de Moraes",
+		"numero": "448",
+		"bairro": "Bonsucesso",
+		"latitude": "-22.857428",
+		"longitude": "-43.258105"
+	},
+	{
+		"estacao": "Centro Metropolitano",
+		"horarioestacao": "05h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Embaixador Abelardo Bueno",
+		"numero": "201",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-22.973397",
+		"longitude": "-43.365665"
+	},
+	{
+		"estacao": "Curicica",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Estrada dos Bandeirantes",
+		"numero": "5046",
+		"bairro": "Jacarepaguá",
+		"latitude": "-22.959863",
+		"longitude": "-43.388709"
+	},
+	{
+		"estacao": "Divina Providência",
+		"horarioestacao": "05h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Estrada dos Bandeirantes",
+		"numero": "2487",
+		"bairro": "Taquara",
+		"latitude": "-22.940681",
+		"longitude": "-43.372582"
+	},
+	{
+		"estacao": "Galeão - Tom Jobim 1",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida Vinte de Janeiro - Aeroporto do Galeão",
+		"numero": "",
+		"bairro": "Ilha do Governador",
+		"latitude": "-22.811072",
+		"longitude": "-43.251521"
+	},
+	{
+		"estacao": "Galeão - Tom Jobim 2",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida Vinte de Janeiro - Aeroporto do Galeão",
+		"numero": "",
+		"bairro": "Ilha do Governador",
+		"latitude": "-22.814853",
+		"longitude": "-43.245413"
+	},
+	{
+		"estacao": "Guaporé",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Braz de Pina",
+		"numero": "617",
+		"bairro": "Vila da Penha",
+		"latitude": "-22.837652",
+		"longitude": "-43.289748"
+	},
+	{
+		"estacao": "Ibiapina",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Rua Ibiapina",
+		"numero": "193",
+		"bairro": "Olaria",
+		"latitude": "-22.842424",
+		"longitude": "-43.272571"
+	},
+	{
+		"estacao": "Ipase",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Rua Cândido Benício",
+		"numero": "2785",
+		"bairro": "Praça Seca",
+		"latitude": "-22.904666",
+		"longitude": "-43.357059"
+	},
+	{
+		"estacao": "Lourenço Jorge",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Ayrton Senna",
+		"numero": "2000",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-22.994623",
+		"longitude": "-43.365908"
+	},
+	{
+		"estacao": "Madureira - Manaceia",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "",
+		"numero": "",
+		"bairro": "",
+		"latitude": "-22.877269",
+		"longitude": "-43.336119"
+	},
+	{
+		"estacao": "Marambaia",
+		"horarioestacao": "05h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Rua Luisa de Carvalho",
+		"numero": "51",
+		"bairro": "Vicente de Carvalho",
+		"latitude": "-22.853048",
+		"longitude": "-43.320293"
+	},
+	{
+		"estacao": "Maré",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Brigadeiro Trompowski",
+		"numero": "580",
+		"bairro": "Maré",
+		"latitude": "-22.847028",
+		"longitude": "-43.243724"
+	},
+	{
+		"estacao": "Mercadão",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida Ministro Edigar Romero",
+		"numero": "245",
+		"bairro": "Madureira",
+		"latitude": "-22.870275",
+		"longitude": "-43.335585"
+	},
+	{
+		"estacao": "Merck",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Estrada dos Bandeirantes",
+		"numero": "1399",
+		"bairro": "Taquara",
+		"latitude": "-22.935205",
+		"longitude": "-43.371897"
+	},
+	{
+		"estacao": "Olaria - Cacique de Ramos",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Rua Etelvina",
+		"numero": "9",
+		"bairro": "Olaria",
+		"latitude": "-22.848549",
+		"longitude": "-43.265470"
+	},
+	{
+		"estacao": "Otaviano",
+		"horarioestacao": "5h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Ministro Edigar Romero",
+		"numero": "491",
+		"bairro": "Madureira",
+		"latitude": "-22.865786",
+		"longitude": "-43.334371"
+	},
+	{
+		"estacao": "Pastor José Santos",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida Braz de Pina",
+		"numero": "337",
+		"bairro": "Penha",
+		"latitude": "-22.839078",
+		"longitude": "-43.283324"
+	},
+	{
+		"estacao": "Pedro Correia",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Estrada Coronel Pedro Correia",
+		"numero": "870",
+		"bairro": "Jacarepaguá",
+		"latitude": "-22.967654",
+		"longitude": "-43.390628"
+	},
+	{
+		"estacao": "Pedro Taques",
+		"horarioestacao": "5h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Vicente de Carvalho",
+		"numero": "1503",
+		"bairro": "Penha Circular",
+		"latitude": "-22.841410",
+		"longitude": "-43.298766"
+	},
+	{
+		"estacao": "Penha 1",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Braz de Pina",
+		"numero": "11",
+		"bairro": "Penha",
+		"latitude": "-22.839078",
+		"longitude": "-43.283324"
+	},
+	{
+		"estacao": "Penha 2",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Rua Monsenhor Alves Rocha",
+		"numero": "187",
+		"bairro": "Penha",
+		"latitude": "-22.841933",
+		"longitude": "-43.276424"
+	},
+	{
+		"estacao": "Pinto Teles",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Rua Cândido Benício",
+		"numero": "643",
+		"bairro": "Campinho",
+		"latitude": "-22.888422",
+		"longitude": "-43.345959"
+	},
+	{
+		"estacao": "Praça Seca",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Praça Seca",
+		"numero": "32",
+		"bairro": "Praça Seca",
+		"latitude": "-22.897721",
+		"longitude": "-43.352272"
+	},
+	{
+		"estacao": "Praça do Bandolim",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Estrada dos Bandeirantes",
+		"numero": "4450",
+		"bairro": "Curicica",
+		"latitude": "-22.958629",
+		"longitude": "-43.383454"
+	},
+	{
+		"estacao": "Praça do Carmo",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Braz de Pina",
+		"numero": "846",
+		"bairro": "Vila da Penha",
+		"latitude": "-22.838808",
+		"longitude": "-43.295030"
+	},
+	{
+		"estacao": "Recanto das Palmeiras - Jardim São Luiz",
+		"horarioestacao": "05h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Estrada dos Bandeirantes",
+		"numero": "2487",
+		"bairro": "Taquara",
+		"latitude": "-22.948269",
+		"longitude": "-43.372440"
+	},
+	{
+		"estacao": "Rede Sarah",
+		"horarioestacao": "05h à 01h",
+		"horariobilheteria": "05h às 22h",
+		"logradouro": "Avenida Embaixador Abelardo Bueno",
+		"numero": "1500",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-22.973335",
+		"longitude": "-43.376679"
+	},
+	{
+		"estacao": "Rio 2",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Embaixador Abelardo Bueno",
+		"numero": "2200",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-22.973222",
+		"longitude": "-43.382816"
+	},
+	{
+		"estacao": "Santa Efigênia",
+		"horarioestacao": "05 às 23h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Estrada dos Bandeirantes",
+		"numero": "1405",
+		"bairro": "Taquara",
+		"latitude": "-22.936640",
+		"longitude": "-43.371810"
+	},
+	{
+		"estacao": "Santa Luzia",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida dos Campeões",
+		"numero": "81",
+		"bairro": "Ramos",
+		"latitude": "-22.854851",
+		"longitude": "-43.253291"
+	},
+	{
+		"estacao": "Tanque",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Rua Cândido Benício",
+		"numero": "4183",
+		"bairro": "Praça Seca",
+		"latitude": "-22.915568",
+		"longitude": "-43.361406"
+	},
+	{
+		"estacao": "Taquara",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Estrada dos Bandeirantes",
+		"numero": "175",
+		"bairro": "Taquara",
+		"latitude": "-22.924175",
+		"longitude": "-43.373898"
+	},
+	{
+		"estacao": "Terminal Bandeira Brasil",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Estrada dos Bandeirantes",
+		"numero": "106",
+		"bairro": "Taquara",
+		"latitude": "-22.923653",
+		"longitude": "-43.374319"
+	},
+	{
+		"estacao": "Terminal Fundão - Aroldo Melodia",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida Brigadeiro Trompowski - Cidade Universitária",
+		"numero": "",
+		"bairro": "Ilha do Governador",
+		"latitude": "-22.839251",
+		"longitude": "-43.239903"
+	},
+	{
+		"estacao": "Terminal Mestre Candeia",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Rua Cândido Benício",
+		"numero": "4165",
+		"bairro": "Praça Seca",
+		"latitude": "-22.915674",
+		"longitude": "-43.361068"
+	},
+	{
+		"estacao": "Terminal Paulo da Portela",
+		"horarioestacao": "04h às 23h",
+		"horariobilheteria": "04h às 23h",
+		"logradouro": "Rua Padre Manso",
+		"numero": "203",
+		"bairro": "Madureira",
+		"latitude": "-22.877548",
+		"longitude": "-43.337287"
+	},
+	{
+		"estacao": "Vaz Lobo",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Vicente de Carvalho",
+		"numero": "27",
+		"bairro": "Vila Cosmos",
+		"latitude": "-22.856482",
+		"longitude": "-43.328185"
+	},
+	{
+		"estacao": "Via Parque",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida Ayrton Senna",
+		"numero": "2541",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-22.983946",
+		"longitude": "-43.365739"
+	},
+	{
+		"estacao": "Vicente de Carvalho",
+		"horarioestacao": "24h",
+		"horariobilheteria": "Parador: 24h",
+		"logradouro": "Avenida Vicente de Carvalho",
+		"numero": "739",
+		"bairro": "Vicente de Carvalho",
+		"latitude": "-22.852653",
+		"longitude": "-43.312762"
+	},
+	{
+		"estacao": "Vila Kosmos - Nossa Senhora do Carmo",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Vicente de Carvalho",
+		"numero": "970",
+		"bairro": "Vila Cosmos",
+		"latitude": "-22.849690",
+		"longitude": "-43.308003"
+	},
+	{
+		"estacao": "Vila Queiroz",
+		"horarioestacao": "5h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida Ministro Edigar Romero",
+		"numero": "730",
+		"bairro": "Madureira",
+		"latitude": "-22.861410",
+		"longitude": "-43.330398"
+	},
+	{
+		"estacao": "Vila Sapê - IV Centenário",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Estrada dos Bandeirantes",
+		"numero": "2633",
+		"bairro": "Jacarepaguá",
+		"latitude": "-22.952199",
+		"longitude": "-43.374597"
+	},
+	{
+		"estacao": "31 de Outubro",
+		"horarioestacao": "04h a 01h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "11443",
+		"bairro": "Paciência",
+		"latitude": "-22.918235",
+		"longitude": "-43.639033"
+	},
+	{
+		"estacao": "Terminal Alvorada",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida das Américas",
+		"numero": "5300",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.000455",
+		"longitude": "-43.366098"
+	},
+	{
+		"estacao": "Americas Park",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "7837",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.000424",
+		"longitude": "-43.389816"
+	},
+	{
+		"estacao": "Ana Gonzaga",
+		"horarioestacao": "04h a 01h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "6318",
+		"bairro": "Inhoaiba",
+		"latitude": "-22.911327",
+		"longitude": "-43.589747"
+	},
+	{
+		"estacao": "Benvindo de Novaes",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "15799",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.014387",
+		"longitude": "-43.466712"
+	},
+	{
+		"estacao": "Bosque da Barra",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "6455",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.000315",
+		"longitude": "-43.377483"
+	},
+	{
+		"estacao": "CTEx.",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h ás 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Barra de Guaratiba",
+		"latitude": "-23.005245",
+		"longitude": "-43.558382"
+	},
+	{
+		"estacao": "Cajueiros",
+		"horarioestacao": "04h a 01h",
+		"horariobilheteria": "04h às 20h",
+		"logradouro": "Rua Felipe Cardoso",
+		"numero": "1985",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.930834",
+		"longitude": "-43.673448"
+	},
+	{
+		"estacao": "Cesarinho",
+		"horarioestacao": "24h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "12100",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.920442",
+		"longitude": "-43.643513"
+	},
+	{
+		"estacao": "Cesarão I",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "14112",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.934584",
+		"longitude": "-43.665316"
+	},
+	{
+		"estacao": "Cesarão II",
+		"horarioestacao": "24h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "13612",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.933423",
+		"longitude": "-43.661956"
+	},
+	{
+		"estacao": "Cesarão III",
+		"horarioestacao": "24h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "13152",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.931732",
+		"longitude": "-43.657254"
+	},
+	{
+		"estacao": "Cosmos",
+		"horarioestacao": "04h a 01h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "8961",
+		"bairro": "Cosmos",
+		"latitude": "-22.915651",
+		"longitude": "-43.616081"
+	},
+	{
+		"estacao": "Curral Falso",
+		"horarioestacao": "24h",
+		"horariobilheteria": "04h às 20h",
+		"logradouro": "Estrada da Pedra",
+		"numero": "",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.936553",
+		"longitude": "-43.666918"
+	},
+	{
+		"estacao": "Cândido Magalhães",
+		"horarioestacao": "24h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "3381",
+		"bairro": "Campo Grande",
+		"latitude": "-22.907696",
+		"longitude": "-43.564070"
+	},
+	{
+		"estacao": "Dom Bosco",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "20700",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.018217",
+		"longitude": "-43.509009"
+	},
+	{
+		"estacao": "Embrapa",
+		"horarioestacao": "04h á 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Guaratiba",
+		"latitude": "-22.999606",
+		"longitude": "-43.582270"
+	},
+	{
+		"estacao": "Gastão Rangel",
+		"horarioestacao": "24h",
+		"horariobilheteria": "04h às 20h",
+		"logradouro": "Rua Felipe Cardoso",
+		"numero": "",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.907529",
+		"longitude": "-43.575803"
+	},
+	{
+		"estacao": "Gelson Fonseca",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "13820",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.009781",
+		"longitude": "-43.448692"
+	},
+	{
+		"estacao": "General Olímpio",
+		"horarioestacao": "04h a 01h",
+		"horariobilheteria": "04h às 20h",
+		"logradouro": "Rua Felipe Cardoso",
+		"numero": "802",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.922244",
+		"longitude": "-43.679626"
+	},
+	{
+		"estacao": "Gilka Machado",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "16699",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.017020",
+		"longitude": "-43.477030"
+	},
+	{
+		"estacao": "Gláucio Gil",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida das Américas",
+		"numero": "15015",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.012395",
+		"longitude": "-43.458939"
+	},
+	{
+		"estacao": "Golfe Olímpico",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Avenida das Américas",
+		"numero": "10101",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.000043",
+		"longitude": "-43.412234"
+	},
+	{
+		"estacao": "Gramado",
+		"horarioestacao": "24h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Rua Gramado",
+		"numero": "33",
+		"bairro": "Campo Grande",
+		"latitude": "-22.904444",
+		"longitude": "-43.570607"
+	},
+	{
+		"estacao": "Guignard",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "15000",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.010806",
+		"longitude": "-43.452662"
+	},
+	{
+		"estacao": "Guiomar Novaes",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "17655",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.018446",
+		"longitude": "-43.482635"
+	},
+	{
+		"estacao": "Icurana",
+		"horarioestacao": "04h a 01h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "7800",
+		"bairro": "Cosmos",
+		"latitude": "-22.915079",
+		"longitude": "-43.605807"
+	},
+	{
+		"estacao": "Ilha de Guaratiba",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Guaratiba",
+		"latitude": "-23.009452",
+		"longitude": "-43.539881"
+	},
+	{
+		"estacao": "Inhoaíba",
+		"horarioestacao": "04h a 01h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "6851",
+		"bairro": "Inhoaiba",
+		"latitude": "-22.913374",
+		"longitude": "-43.595746"
+	},
+	{
+		"estacao": "Interlagos",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "10333",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.000882",
+		"longitude": "-43.417469"
+	},
+	{
+		"estacao": "Júlia Miguel",
+		"horarioestacao": "04h a 01h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "10197",
+		"bairro": "Paciência",
+		"latitude": "-22.915634",
+		"longitude": "-43.627933"
+	},
+	{
+		"estacao": "Magarça",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Guaratiba",
+		"latitude": "-22.968633",
+		"longitude": "-43.622026"
+	},
+	{
+		"estacao": "Maria Tereza",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Estrada do Monteiro",
+		"numero": "26",
+		"bairro": "Campo Grande",
+		"latitude": "-22.908190",
+		"longitude": "-43.565887"
+	},
+	{
+		"estacao": "Mato Alto",
+		"horarioestacao": "24h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Guaratiba",
+		"latitude": "-22.993808",
+		"longitude": "-43.596807"
+	},
+	{
+		"estacao": "Notre Dame",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "20500",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.020606",
+		"longitude": "-43.500208"
+	},
+	{
+		"estacao": "Nova Barra",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "16313",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.015606",
+		"longitude": "-43.471506"
+	},
+	{
+		"estacao": "Novo Leblon",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "7607",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.000417",
+		"longitude": "-43.383240"
+	},
+	{
+		"estacao": "Parque São Paulo",
+		"horarioestacao": "04h a 01h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "9601",
+		"bairro": "Paciência",
+		"latitude": "-22.916250",
+		"longitude": "-43.622324"
+	},
+	{
+		"estacao": "Parque da Esperança",
+		"horarioestacao": "24h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "4070",
+		"bairro": "Campo Grande",
+		"latitude": "-22.906916",
+		"longitude": "-43.571675"
+	},
+	{
+		"estacao": "Pedra de Itaúna",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "11365",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.002929",
+		"longitude": "-43.424078"
+	},
+	{
+		"estacao": "Pina Rangel",
+		"horarioestacao": "24h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "4596",
+		"bairro": "Campo Grande",
+		"latitude": "-22.907512",
+		"longitude": "-43.575800"
+	},
+	{
+		"estacao": "Pingo D`Água",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida das Américas",
+		"numero": "",
+		"bairro": "Guaratiba",
+		"latitude": "-22.964863",
+		"longitude": "-43.647237"
+	},
+	{
+		"estacao": "Pontal",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "21783",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.016268",
+		"longitude": "-43.516037"
+	},
+	{
+		"estacao": "Pontões - Barra Sul",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "12141",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.005513",
+		"longitude": "-43.432003"
+	},
+	{
+		"estacao": "Prefeito Alim Pedro",
+		"horarioestacao": "24h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Rua Gramado",
+		"numero": "783",
+		"bairro": "Campo Grande",
+		"latitude": "-22.903662",
+		"longitude": "-43.566295"
+	},
+	{
+		"estacao": "Recanto das Garças",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "20049",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.021018",
+		"longitude": "-43.496627"
+	},
+	{
+		"estacao": "Recreio Shopping",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida das Américas",
+		"numero": "18000",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.019632",
+		"longitude": "-43.487305"
+	},
+	{
+		"estacao": "Riomar",
+		"horarioestacao": "24h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "9300",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-22.999956",
+		"longitude": "-43.406953"
+	},
+	{
+		"estacao": "Salvador Allende",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida das Américas",
+		"numero": "13600",
+		"bairro": "Recreio dos Bandeirantes",
+		"latitude": "-23.008258",
+		"longitude": "-43.442724"
+	},
+	{
+		"estacao": "Terminal Santa Cruz",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Rua Felipe Cardoso",
+		"numero": "195",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.917239",
+		"longitude": "-43.683535"
+	},
+	{
+		"estacao": "Santa Eugênia",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "10809",
+		"bairro": "Paciência",
+		"latitude": "-22.916784",
+		"longitude": "-43.632762"
+	},
+	{
+		"estacao": "Santa Mônica Jardins",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "06h às 22h",
+		"logradouro": "Avenida das Américas",
+		"numero": "8888",
+		"bairro": "Barra da Tijuca",
+		"latitude": "-23.000224",
+		"longitude": "-43.398535"
+	},
+	{
+		"estacao": "Santa Veridiana",
+		"horarioestacao": "04h a 01h",
+		"horariobilheteria": "04h às 20h",
+		"logradouro": "Estrada da Pedra",
+		"numero": "",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.940490",
+		"longitude": "-43.665187"
+	},
+	{
+		"estacao": "São Jorge",
+		"horarioestacao": "24h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "5580",
+		"bairro": "Campo Grande",
+		"latitude": "-22.910862",
+		"longitude": "-43.584209"
+	},
+	{
+		"estacao": "Terminal Campo Grande",
+		"horarioestacao": "24h",
+		"horariobilheteria": "24h",
+		"logradouro": "Rua Aurélio Figueredo",
+		"numero": "65",
+		"bairro": "Campo Grande",
+		"latitude": "-22.901771",
+		"longitude": "-43.554788"
+	},
+	{
+		"estacao": "Três Pontes",
+		"horarioestacao": "04h a 01h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "12281",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.925410",
+		"longitude": "-43.649915"
+	},
+	{
+		"estacao": "Vendas de Varanda",
+		"horarioestacao": "04h à 01h",
+		"horariobilheteria": "04h às 20h",
+		"logradouro": "Estrada da Pedra",
+		"numero": "",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.950888",
+		"longitude": "-43.650774"
+	},
+	{
+		"estacao": "Vila Paciência",
+		"horarioestacao": "",
+		"horariobilheteria": "",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "12598",
+		"bairro": "Santa Cruz",
+		"latitude": "-22.928346",
+		"longitude": "-43.653770"
+	},
+	{
+		"estacao": "Vilar Carioca",
+		"horarioestacao": "24h",
+		"horariobilheteria": "05h às 21h",
+		"logradouro": "Avenida Cesário de Melo",
+		"numero": "7431",
+		"bairro": "Inhoaiba",
+		"latitude": "-22.914180",
+		"longitude": "-43.601305"
+	}
+]
