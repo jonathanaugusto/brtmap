@@ -19,7 +19,7 @@ import Array._
 // * * * * *  curl -N http://webapibrt.rio.rj.gov.br/api/v1/brt | /usr/local/hadoop/bin/hdfs dfs -put - /user/ubuntu/data/brt_$(date +\%Y\%m\%d\%H\%M\%S).json
 
 // Pra rodar no spark-submit:
-// bin/spark-submit --master spark://<host>:7077 --jars ../BRTStreamReceiver/mysql-connector-java-5.1.43-bin.jar --num-executors 3 --driver-memory 2g --executor-memory 1g --executor-cores 1 --class BRTStreamReceiver.Main main.scala.BRTStreamReceiver ../BRTStreamReceiver/BRTStreamReceiver.jar <args>
+// bin/spark-submit --master spark://<host>:7077 --jars ../BRTStreamReceiver/mysql-connector-java-5.1.43-bin.jar --num-executors 3 --driver-memory 2g --executor-memory 1g --executor-cores 1 --class BRTStreamReceiver.Main ../BRTStreamReceiver/BRTStreamReceiver.jar <args>
 
 object Main {
 
@@ -68,6 +68,7 @@ object Main {
 
       def process(record: Row) = {
         // write string to connection
+<<<<<<< HEAD
         val columnNames = record.schema.fieldNames.toList
         var command = "INSERT INTO "
         if (columnNames contains "window") command += "agg_vel (" else command += "gpsdata ("
@@ -78,6 +79,13 @@ object Main {
 
         statement.execute(command)
 
+=======
+        statement.executeUpdate("INSERT INTO " +
+          "gpsdata (codigo, linha, latitude, longitude, datahora, velocidade, sentido, trajeto, corredor) VALUES ('" +
+          record.getAs[String]("codigo") + "','" + record.getAs[String]("linha") + "'," + record.getAs[Double]("latitude") + "," +
+          record.getAs[Double]("longitude") + ",'" + record.getAs[Timestamp]("datahora") + "'," + record.getAs[Double]("velocidade") + ",'" +
+          record.getAs[String]("sentido") + "',\"" +  record.getAs[String]("trajeto") + "\",'" + record.getAs[String]("corredor") + "')")
+>>>>>>> master
       }
 
       def close(errorOrNull: Throwable): Unit = {
@@ -100,6 +108,7 @@ object Main {
     val spark = SparkSession
       .builder
       .appName("BRTStreamReceiver")
+      .master("local[*]")
       .getOrCreate()
 
     import spark.implicits._
@@ -112,6 +121,7 @@ object Main {
     val a = veiculos.select(explode($"veiculos").as("veiculo"))
 
     val b = a
+<<<<<<< HEAD
       .withColumn("codigo", ($"veiculo.codigo"))
       .withColumn("datahora", to_timestamp(from_unixtime($"veiculo.datahora" / 1000L)))
       .withColumn("codlinha", ($"veiculo.linha"))
@@ -122,6 +132,18 @@ object Main {
       .withColumn("nome", ($"veiculo.trajeto"))
       .drop($"veiculo")
 
+=======
+    .withColumn("codigo", ($"veiculo.codigo"))
+    .withColumn("datahora", to_date(from_unixtime($"veiculo.datahora"/1000L)))
+    .withColumn("codlinha", ($"veiculo.linha"))
+    .withColumn("latitude", ($"veiculo.latitude"))
+    .withColumn("longitude", ($"veiculo.longitude"))
+    .withColumn("velocidade", ($"veiculo.velocidade"))
+    .withColumn("sentido", ($"veiculo.sentido"))
+    .withColumn("nome", ($"veiculo.trajeto"))
+    .drop($"veiculo")
+          
+>>>>>>> master
     val c = b
       .filter(!($"nome".isNull) && !($"codlinha".isNull))
 
