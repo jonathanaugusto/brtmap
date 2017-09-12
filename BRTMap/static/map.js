@@ -206,9 +206,10 @@
                     legend: {
                         position: "top"
                     },
-                    seriesDefaults: {
-                        type: "column"
-                    },
+	                seriesDefaults: {
+	                    type: "line",
+	                    style: "smooth"
+	                },
                     series: result.content,
                     valueAxis: {
                         labels: {
@@ -225,7 +226,7 @@
                             visible: false
                         },
                         labels: {
-                            padding: {top: 50}
+                            padding: {top: 10}
                         }
                     },
                     tooltip: {
@@ -252,9 +253,10 @@
 	            legend: {
 	                position: "top"
 	            },
-	            seriesDefaults: {
-	                type: "column"
-	            },
+                seriesDefaults: {
+                    type: "line",
+                    style: "smooth"
+                },
 	            series: result.content,
 	            valueAxis: {
 	                labels: {
@@ -271,7 +273,7 @@
 	                    visible: false
 	                },
 	                labels: {
-	                    padding: {top: 50}
+	                    padding: {top: 10}
 	                }
 	            },
 	            tooltip: {
@@ -316,7 +318,7 @@
 	                    visible: false
 	                },
 	                labels: {
-	                    padding: {top: 50}
+	                    padding: {top: 10}
 	                }
 	            },
 	            tooltip: {
@@ -361,7 +363,7 @@
 	                    visible: false
 	                },
 	                labels: {
-	                    padding: {top: 50}
+	                    padding: {top: 10}
 	                }
 	            },
 	            tooltip: {

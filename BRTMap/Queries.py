@@ -4,15 +4,15 @@ transoeste = ["10","11","12","13","14","15","17","18","19","20","20A","21","22",
 transcarioca = ["30","31","33","35","36","38","40","41","42"]
 transolimpica = ["41","50","51","53"]
 lote_zero = ["18","21","22","23","24","40","50","53"]
-linhas = '("10","11","12","13","14","15","17","18","19","20","20A","21","22","23","24","30","31","33","35","36","38","40","41","42","41","50","51","53","18","21","22","23","24","40","50","53")'
+linhas = '("10","11","12","13","14","15","17","18","19","20","21","21A","22","23","24","30","31","33","35","36","38","40","41","42","41","50","51","53","18","21","22","23","24","40","50","53")'
 
 def brtPosQuery(linha):
     c, conn = connection()
     query = ""
     if linha == "Linha":
-        query = "SELECT latitude, longitude, trajeto, velocidade, corredor FROM gpsdata WHERE datahora > timestamp(DATE_SUB(NOW(), INTERVAL 3 MINUTE))"
+        query = "SELECT latitude, longitude, trajeto, velocidade, corredor FROM gpsdata WHERE datahora > timestamp(DATE_SUB('2017-08-28', INTERVAL 3 MINUTE))"
     else:
-        query = "SELECT latitude, longitude, trajeto, velocidade, corredor FROM gpsdata WHERE datahora > timestamp(DATE_SUB(NOW(), INTERVAL 3 MINUTE)) AND corredor = '{0}'".format(linha)
+        query = "SELECT latitude, longitude, trajeto, velocidade, corredor FROM gpsdata WHERE datahora > timestamp(DATE_SUB('2017-08-28', INTERVAL 3 MINUTE)) AND corredor = '{0}'".format(linha)
         
     result_finalize = []
     result_set_country = c.execute(query.format(linhas))
@@ -35,9 +35,9 @@ def heatMapQuery(linha=None):
     
     query = ""
     if linha == "Linha":
-        query = "SELECT latitude, longitude, trajeto, velocidade, corredor FROM gpsdata WHERE datahora > timestamp(DATE_SUB(NOW(), INTERVAL 10 MINUTE))"
+        query = "SELECT latitude, longitude, trajeto, velocidade, corredor FROM gpsdata WHERE datahora > timestamp(DATE_SUB('2017-08-28', INTERVAL 10 MINUTE))"
     else:
-        query = "SELECT latitude, longitude, trajeto, velocidade, corredor FROM gpsdata WHERE datahora > timestamp(DATE_SUB(NOW() from gpsdata), INTERVAL 10 MINUTE)) AND corredor = '{0}'".format(linha)
+        query = "SELECT latitude, longitude, trajeto, velocidade, corredor FROM gpsdata WHERE datahora > timestamp(DATE_SUB('2017-08-28' from gpsdata), INTERVAL 10 MINUTE)) AND corredor = '{0}'".format(linha)
         
     result_finalize = []
     result_set_country = c.execute(query.format(linhas))
@@ -51,9 +51,9 @@ def averageSpeedQuery(per_day = True):
     c, conn = connection()
     query = ""
     if per_day:
-        query = "select hora, corredor, max(vel_media) from stats_vel where data > DATE_SUB(NOW(), INTERVAL 24 HOUR) group by hora, corredor order by hora"
+        query = "select TIME_FORMAT(hora, '%H:%i') as hora, corredor, max(vel_media) from stats_vel where data > DATE_SUB('2017-08-28', INTERVAL 24 HOUR) group by hora, corredor"
     else:
-        query = "select data, corredor, max(vel_media) from stats_vel where data > DATE_SUB(NOW(), INTERVAL 6 DAY) group by data, corredor order by data"
+        query = "select DATE_FORMAT(data, '%a, %Y-%c-%e') as data, corredor, max(vel_media) from stats_vel where data > DATE_SUB('2017-08-28', INTERVAL 7 DAY) group by data, corredor"
     
     result_finalize = []    
     result_set = c.execute(query)
@@ -71,11 +71,11 @@ def averageSpeedQuery(per_day = True):
     for r in c:
         data, corredor, vel = r
         if corredor == 'TransOeste':
-            transOeste.get("data").append(str(vel))
+            transOeste.get("data").append(vel)
         if corredor == 'TransCarioca':
-            transCarioca.get("data").append(str(vel))
+            transCarioca.get("data").append(vel)
         if corredor == 'TransOlímpica':
-            transOlimpica.get("data").append(str(vel))
+            transOlimpica.get("data").append(vel)
         if str(data) not in categoria:
             categoria.append(str(data))
             
@@ -87,31 +87,34 @@ def availableBusQuery(per_day = True):
     c, conn = connection()
     query = ""
     if per_day:
-        query = "select hora, corredor, max(qtd_carros) from stats_qtd where data > DATE_SUB(NOW(), INTERVAL 24 HOUR) group by hora, corredor order by hora"
+        query = "select TIME_FORMAT(hora, '%H:%i') as hora, corredor, max(qtd_carros) from stats_qtd where data > DATE_SUB('2017-08-28', INTERVAL 24 HOUR) group by hora, corredor"
     else:
-        query = "select data, corredor, max(qtd_carros) from stats_qtd where data > DATE_SUB(NOW(), INTERVAL 6 DAY) group by data, corredor order by data"
+        query = "select DATE_FORMAT(data, '%a, %Y-%c-%e') as data, corredor, max(qtd_carros) from stats_qtd where data > DATE_SUB('2017-08-28', INTERVAL 6 DAY) group by data, corredor"
     
     result_finalize = []    
     result_set = c.execute(query)
     
-    transOlimpica = {"name":"TransOlímpica",  
-                        "data":[]
-                    }
-    transCarioca = {"name":"TransCarioca", 
+    transCarioca = {"name":"TransCarioca",
+                     "stack":"BusQuery", 
                         "data":[]
                     }
     transOeste = {"name":"TransOeste", 
+                  "stack":"BusQuery",
                   "data":[]
+                    }
+    transOlimpica = {"name":"TransOlímpica",
+                     "stack":"BusQuery",
+                        "data":[]
                     }
     categoria = []
     for r in c:
         data, corredor, qtd = r
-        if corredor == 'TransOeste':
-            transOeste.get("data").append(str(qtd))
         if corredor == 'TransCarioca':
-            transCarioca.get("data").append(str(qtd))
+            transCarioca.get("data").append(qtd)
+        if corredor == 'TransOeste':
+            transOeste.get("data").append(qtd)
         if corredor == 'TransOlímpica':
-            transOlimpica.get("data").append(str(qtd))
+            transOlimpica.get("data").append(qtd)
         if str(data) not in categoria:
             categoria.append(str(data))
             
